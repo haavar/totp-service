@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>419</string>
+	<key>AMApplicationVersion</key>
+	<string>2.6</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.string</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>2.0.3</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>COMMAND_STRING</key>
+					<dict/>
+					<key>CheckedForUserDefaultShell</key>
+					<dict/>
+					<key>inputMethod</key>
+					<dict/>
+					<key>shell</key>
+					<dict/>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.string</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run Shell Script.action</string>
+				<key>ActionName</key>
+				<string>Run Shell Script</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>COMMAND_STRING</key>
+					<string>#!/bin/bash
+# This script gets the secret for they keychain and prints it
+
+aes_key=D0D0D0E0D0D0DFDFDF2C34323937D7AE
+keychain=${HOME}/Library/Keychains/VIPAccess.keychain
+
+#Finding machine serial number (used by VIPAccess to secure the keychain.):
+serial=`ioreg -rac IOPlatformExpertDevice | grep -A 1 IOPlatformSerialNumber | tail -n 1 | sed 's/.*&lt;string&gt;//;s/&lt;\/.*//'`
+
+#vlog "Reading encrypted Credential ID and OTP secret key from $keychain:"
+security unlock-keychain -p "${serial}SymantecVIPAccess${USER}" $keychain
+
+store=`security find-generic-password -gl CredentialStore $keychain 2&gt;&amp;1`
+
+id_crypt=`echo ${store} | sed 's/.*acct"&lt;blob&gt;="//;s/".*//'`
+key_crypt=`echo ${store}| sed 's/.*password: "//;s/".*//'`
+
+#"Decrypting Credential ID and OTP key:"
+id_plain=`echo $id_crypt | openssl enc -aes-128-cbc -d -K $aes_key -iv 0 -a | sed 's/Symantec//'`
+key_plain=`echo $key_crypt | openssl enc -aes-128-cbc -d -K $aes_key -iv 0 -a |  xxd -p`
+
+echo $key_plain
+#${HOME}/usr/oath-toolkit-2.6.1/oathtool/oathtool --totp $key_plain</string>
+					<key>CheckedForUserDefaultShell</key>
+					<true/>
+					<key>inputMethod</key>
+					<integer>1</integer>
+					<key>shell</key>
+					<string>/bin/bash</string>
+					<key>source</key>
+					<string></string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.RunShellScript</string>
+				<key>CFBundleVersion</key>
+				<string>2.0.3</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunShellScriptAction</string>
+				<key>InputUUID</key>
+				<string>D232FA84-9485-4C61-9154-83FA4712CC65</string>
+				<key>Keywords</key>
+				<array>
+					<string>Shell</string>
+					<string>Script</string>
+					<string>Command</string>
+					<string>Run</string>
+					<string>Unix</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>6A48F510-DED8-42E2-91AD-8CCC363DC1AD</string>
+				<key>StartAction</key>
+				<false/>
+				<key>UUID</key>
+				<string>ABD27DF2-F3ED-45D6-A488-C27B4BBA1ACF</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<integer>0</integer>
+						<key>name</key>
+						<string>inputMethod</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+					<key>1</key>
+					<dict>
+						<key>default value</key>
+						<string></string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>1</string>
+					</dict>
+					<key>2</key>
+					<dict>
+						<key>default value</key>
+						<false/>
+						<key>name</key>
+						<string>CheckedForUserDefaultShell</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>2</string>
+					</dict>
+					<key>3</key>
+					<dict>
+						<key>default value</key>
+						<string></string>
+						<key>name</key>
+						<string>COMMAND_STRING</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>3</string>
+					</dict>
+					<key>4</key>
+					<dict>
+						<key>default value</key>
+						<string>/bin/sh</string>
+						<key>name</key>
+						<string>shell</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>4</string>
+					</dict>
+				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>529.000000:496.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/English.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.string</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>2.0.3</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>COMMAND_STRING</key>
+					<dict/>
+					<key>CheckedForUserDefaultShell</key>
+					<dict/>
+					<key>inputMethod</key>
+					<dict/>
+					<key>shell</key>
+					<dict/>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.string</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run Shell Script.action</string>
+				<key>ActionName</key>
+				<string>Run Shell Script</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>COMMAND_STRING</key>
+					<string>#!/bin/bash
+# This script reads the secret from standard in and prints the a POTP.
+#
+# Based of work by Kenji Yoshino 
+# This script is released under the Version 3 of the GNU General Public
+# License https://www.gnu.org/licenses/gpl-3.0.txt
+
+
+function hex2shell {
+   hex=$1
+   if [[ $(( ${#hex} % 2 )) -eq 1 ]]; then
+         hex="0$hex"
+   fi
+
+   echo $hex | sed 's/\(..\)/\\x\1/g'
+}
+
+# xorHex $str1 $str2 [
+# xors $str1 with $str2. Returns binary
+function xorHex {
+   len=$( echo -e "${#1}\\n${#2}" | sort -n | head -n 1 )
+   
+   local rtn=''
+   
+   ndx=0
+   while [ $ndx -lt $len ]; do
+      if [[ $(( $ndx % 2 )) -eq 0 ]]; then
+         rtn="$rtn\x"
+      fi
+      first="0x${1:$ndx:1}"
+      second="0x${2:$ndx:1}"
+      
+      rtn="$rtn$( printf '%x' $((first ^ second)) )"
+      (( ndx++ ))
+   done
+   
+   printf "$rtn"
+}
+
+# hmac key 
+# key is a key in hex
+function hmac {
+   block_size=128 #512 bits
+   local key=$1
+ 
+   #pad the key with zeros and truncate to the correct length
+   while [ ${#key} -lt $block_size ] ; do 
+     key=${key}0;
+   done
+    
+   for i in `seq 1 128`; do 
+     ipad=${ipad}36
+     opad=${opad}5c
+   done
+
+
+   # perform the actual hmac operation per FIPS 198-1
+   mac="$( openssl dgst -sha1 &lt;(xorHex $key $ipad; cat -) )"
+   mac="${mac##* }"
+   mac="$( printf $(hex2shell $mac) | cat &lt;( xorHex $key $opad) - | openssl dgst -sha1 )"
+   printf "${mac##* }\n"
+}
+
+function otp {
+   local secret=$1
+
+   timestamp=$(( $( date -u +%s ) / 30 ))
+   timestamp=$( printf '%x' "$timestamp" )
+   timestamp="0000000000000000$timestamp"
+   timestamp="${timestamp:(-16)}"
+   timestamp=$( hex2shell "$timestamp" -n )
+      
+   hash=$( printf "$timestamp" | hmac "$secret" )
+   offset=$( printf '%d' "0x${hash:39:1}" ) # capture the last nibble of the hmac
+   ((offset *= 2)) # convert the byte offset to nibble offset
+   hash=${hash:$offset:8} # truncate the hash to 4 bytes starting at offset
+   # grab the most significant nibble to strip the most significant bit
+   msb=${hash:0:1} 
+   msb=$( printf '%d' "0x$msb" )
+   ((msb %= 8))
+   # recombine the msb with the rest of the hash
+   hash="$( printf '%x' $msb )${hash:1:7}"
+   hash=$( printf '%d' "0x$hash" ) # concert from hex to decimal
+   code="000000$(( hash % 1000000 ))"
+
+   # print time remaining for the TOTP code followed by TOPT value
+   printf "${code:(-6)}\n"
+
+   
+}
+
+read secret
+otp $secret
+exit 0</string>
+					<key>CheckedForUserDefaultShell</key>
+					<true/>
+					<key>inputMethod</key>
+					<integer>0</integer>
+					<key>shell</key>
+					<string>/bin/bash</string>
+					<key>source</key>
+					<string></string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.RunShellScript</string>
+				<key>CFBundleVersion</key>
+				<string>2.0.3</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunShellScriptAction</string>
+				<key>InputUUID</key>
+				<string>BF0A5135-3CED-44E7-AE36-936077B0534B</string>
+				<key>Keywords</key>
+				<array>
+					<string>Shell</string>
+					<string>Script</string>
+					<string>Command</string>
+					<string>Run</string>
+					<string>Unix</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>7F6BBABF-7465-437F-8FA3-C82D10032EAE</string>
+				<key>StartAction</key>
+				<false/>
+				<key>UUID</key>
+				<string>7F23823E-A6CC-4776-BBD8-34D4D9B97925</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<integer>0</integer>
+						<key>name</key>
+						<string>inputMethod</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+					<key>1</key>
+					<dict>
+						<key>default value</key>
+						<string></string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>1</string>
+					</dict>
+					<key>2</key>
+					<dict>
+						<key>default value</key>
+						<false/>
+						<key>name</key>
+						<string>CheckedForUserDefaultShell</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>2</string>
+					</dict>
+					<key>3</key>
+					<dict>
+						<key>default value</key>
+						<string></string>
+						<key>name</key>
+						<string>COMMAND_STRING</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>3</string>
+					</dict>
+					<key>4</key>
+					<dict>
+						<key>default value</key>
+						<string>/bin/sh</string>
+						<key>name</key>
+						<string>shell</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>4</string>
+					</dict>
+				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>529.000000:679.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/English.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<true/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.0.2</string>
+				<key>AMApplication</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>source</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.applescript.object</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Run AppleScript.action</string>
+				<key>ActionName</key>
+				<string>Run AppleScript</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>source</key>
+					<string>on run {input, parameters}	tell application "System Events" to keystroke (input as text) &amp; "
+"end run</string>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.RunScript</string>
+				<key>CFBundleVersion</key>
+				<string>1.0.2</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<false/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>RunScriptAction</string>
+				<key>IgnoresInput</key>
+				<false/>
+				<key>InputUUID</key>
+				<string>2A40B76D-B518-4136-A216-861BA663252A</string>
+				<key>Keywords</key>
+				<array>
+					<string>Run</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>B5E6744B-92A3-4910-AB72-2BE0B894AA8A</string>
+				<key>UUID</key>
+				<string>FA8E1C4C-1385-489D-A0C7-44442927FAB1</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>Automator</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<string>on run {input, parameters}
+	
+	(* Your script goes here *)
+	
+	return input
+end run</string>
+						<key>name</key>
+						<string>source</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>529.000000:977.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict>
+		<key>B7D03F3C-DFE4-4F14-BEB6-A31CBCEA96EF</key>
+		<dict>
+			<key>from</key>
+			<string>ABD27DF2-F3ED-45D6-A488-C27B4BBA1ACF - ABD27DF2-F3ED-45D6-A488-C27B4BBA1ACF</string>
+			<key>to</key>
+			<string>7F23823E-A6CC-4776-BBD8-34D4D9B97925 - 7F23823E-A6CC-4776-BBD8-34D4D9B97925</string>
+		</dict>
+		<key>D7725FBA-A0B5-44C4-A9A0-FC92F4E3C59F</key>
+		<dict>
+			<key>from</key>
+			<string>7F23823E-A6CC-4776-BBD8-34D4D9B97925 - 7F23823E-A6CC-4776-BBD8-34D4D9B97925</string>
+			<key>to</key>
+			<string>FA8E1C4C-1385-489D-A0C7-44442927FAB1 - FA8E1C4C-1385-489D-A0C7-44442927FAB1</string>
+		</dict>
+	</dict>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>serviceApplicationBundleID</key>
+		<string></string>
+		<key>serviceApplicationPath</key>
+		<string></string>
+		<key>serviceInputTypeIdentifier</key>
+		<string>com.apple.Automator.nothing</string>
+		<key>serviceOutputTypeIdentifier</key>
+		<string>com.apple.Automator.nothing</string>
+		<key>serviceProcessesInput</key>
+		<integer>0</integer>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.servicesMenu</string>
+	</dict>
+</dict>
+</plist>
